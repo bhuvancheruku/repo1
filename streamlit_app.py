@@ -38,7 +38,7 @@ if file is not None:
 
     # Check the file with VirusTotal v2
     if st.button("Check for Viruses (v2)"):
-        if api_key:
+        if api_key and file_id:
             st.write("Checking for viruses using VirusTotal API v2...")
             result_v2 = check_file_virustotal_v2(api_key, file)
             st.json(result_v2)
