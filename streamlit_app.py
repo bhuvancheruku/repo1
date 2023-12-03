@@ -25,7 +25,7 @@ def check_file_virustotal_v3(api_key, file_id):
 st.title("Image Virus Checker with VirusTotal")
 
 # Get the user's VirusTotal API key
-api_key = str("1bcf6b4fc6fb75652ef58c6ddb7bccf4dd6141f2062bf040e973fb82bcce1acc")
+api_key = "1bcf6b4fc6fb75652ef58c6ddb7bccf4dd6141f2062bf040e973fb82bcce1acc"
 
 # File upload
 file = st.file_uploader("Upload an image file", type=["png", "jpg", "jpeg"])
