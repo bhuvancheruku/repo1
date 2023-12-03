@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-from stegano import lsb
 
 # Function to check file with VirusTotal API v2
 def check_file_virustotal_v2(api_key, file_content):
@@ -22,19 +21,8 @@ def check_file_virustotal_v3(api_key, file_id):
     else:
         return {"error": {"code": response.status_code, "message": response.text}}
 
-# Function to check if the image contains steganography
-def check_steganography(file):
-    try:
-        secret = lsb.reveal(file.read())
-        if secret:
-            return {"steganography_detected": True, "message": secret}
-        else:
-            return {"steganography_detected": False}
-    except Exception as e:
-        return {"error": str(e)}
-
 # Streamlit UI
-st.title("Image Virus Checker with VirusTotal and Steganography Detection")
+st.title("Image Virus Checker with VirusTotal")
 
 # Get the user's VirusTotal API key
 api_key = st.text_input("Enter your VirusTotal API key")
@@ -65,9 +53,3 @@ if file is not None:
             st.json(result_v3)
         else:
             st.write("Please enter your VirusTotal API key and File ID/Hash")
-
-    # Check for steganography
-    if st.button("Check for Steganography"):
-        st.write("Checking for steganography...")
-        stego_result = check_steganography(file)
-        st.json(stego_result)
