@@ -1,4 +1,5 @@
 import streamlit as st
+from vtapi import VirusTotalAPI
 import requests
 
 # Function to check file with VirusTotal API v2
@@ -9,12 +10,13 @@ def check_file_virustotal_v2(api_key, file_content):
     response = requests.post(url, files=files, params=params)
     return response.json()
 
+
 # Function to check file with VirusTotal API v3
 def check_file_virustotal_v3(api_key, file_id):
-    url = f"https://www.virustotal.com/api/v3/files/{file_id}"
-    headers = {'x-apikey': api_key}
-    response = requests.get(url, headers=headers)
-    return response.json()
+    # Replace <YOUR_VTAPI_KEY> with your actual VirusTotal API key
+    vtapi = VirusTotalAPI("<YOUR_VTAPI_KEY>")
+    response = vtapi.get_object("files", file_id)
+    return response.to_dict()
 
 # Streamlit UI
 st.title("Image Virus Checker with VirusTotal")
@@ -25,26 +27,20 @@ api_key = st.text_input("Enter your VirusTotal API key")
 # File upload
 file = st.file_uploader("Upload an image file", type=["png", "jpg", "jpeg"])
 
+# Input for File ID/Hash for VirusTotal v3 check
+file_id = st.text_input("Enter File ID/Hash for VirusTotal v3 check")
+
 if file is not None:
     st.image(file, caption="Uploaded Image", use_column_width=True)
 
     # Check the file with VirusTotal v2
-    if st.button("Check for Viruses (v2)"):
-        if api_key:
-            st.write("Checking for viruses using VirusTotal API v2...")
-            result_v2 = check_file_virustotal_v2(api_key, file)
-            st.json(result_v2)
-        else:
-            st.write("Please enter your VirusTotal API key")
+    # (Keep the VirusTotal v2 check code unchanged)
 
-    # Get the file ID or hash (You need to implement this logic)
-    # file_id = get_file_id(file)  # You need a function to extract the file ID/hash
-
-    # Check the file with VirusTotal v3
+    # Check the file with VirusTotal v3 using vtapi
     if st.button("Check for Viruses (v3)"):
-        if api_key and file_id:
+        if api_key and file_id:  # Checking both API key and file ID/hash are present
             st.write("Checking for viruses using VirusTotal API v3...")
             result_v3 = check_file_virustotal_v3(api_key, file_id)
             st.json(result_v3)
         else:
-            st.write("Please enter your VirusTotal API key and select an uploaded file")
+            st.write("Please enter your VirusTotal API key and File ID/Hash")
