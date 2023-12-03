@@ -37,7 +37,7 @@ if file is not None:
     st.image(file, caption="Uploaded Image", use_column_width=True)
 
     # Check the file with VirusTotal v2
-     if st.button("Check for Viruses (v2)"):
+    if st.button("Check for Viruses (v2)"):
         if api_key:
             st.write("Checking for viruses using VirusTotal API v2...")
             result_v2 = check_file_virustotal_v2(api_key, file)
