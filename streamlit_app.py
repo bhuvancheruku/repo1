@@ -5,7 +5,7 @@ import requests
 def check_file_virustotal_v2(api_key, file_content):
     url = "https://www.virustotal.com/vtapi/v2/file/scan"
     files = {'file': file_content}
-    params = {'apikey': api_key}
+    params = {'x-apikey': api_key}
     response = requests.post(url, files=files, params=params)
     return response.json()
 
