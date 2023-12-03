@@ -1,5 +1,4 @@
 import streamlit as st
-from vtapi import VirusTotalAPI
 import requests
 
 # Function to check file with VirusTotal API v2
@@ -10,13 +9,17 @@ def check_file_virustotal_v2(api_key, file_content):
     response = requests.post(url, files=files, params=params)
     return response.json()
 
-
 # Function to check file with VirusTotal API v3
 def check_file_virustotal_v3(api_key, file_id):
-    # Replace <YOUR_VTAPI_KEY> with your actual VirusTotal API key
-    vtapi = VirusTotalAPI("<YOUR_VTAPI_KEY>")
-    response = vtapi.get_object("files", file_id)
-    return response.to_dict()
+    url = f"https://www.virustotal.com/api/v3/files/{file_id}"
+    headers = {'x-apikey': api_key}
+    response = requests.get(url, headers=headers)
+    
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": {"code": response.status_code, "message": response.text}}
 
 # Streamlit UI
 st.title("Image Virus Checker with VirusTotal")
@@ -34,9 +37,15 @@ if file is not None:
     st.image(file, caption="Uploaded Image", use_column_width=True)
 
     # Check the file with VirusTotal v2
-    # (Keep the VirusTotal v2 check code unchanged)
+     if st.button("Check for Viruses (v2)"):
+        if api_key:
+            st.write("Checking for viruses using VirusTotal API v2...")
+            result_v2 = check_file_virustotal_v2(api_key, file)
+            st.json(result_v2)
+        else:
+            st.write("Please enter your VirusTotal API key")
 
-    # Check the file with VirusTotal v3 using vtapi
+    # Check the file with VirusTotal v3 using requests
     if st.button("Check for Viruses (v3)"):
         if api_key and file_id:  # Checking both API key and file ID/hash are present
             st.write("Checking for viruses using VirusTotal API v3...")
