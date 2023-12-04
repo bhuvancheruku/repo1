@@ -22,7 +22,7 @@ def check_file_virustotal_v3(api_key, file_id):
         return {"error": {"code": response.status_code, "message": response.text}}
 
 # Streamlit UI
-st.title("Image Virus Checker with VirusTotal")
+st.title("ImageGaurd: Fortifying Digital Visuals Against Malware")
 
 # Get the user's VirusTotal API key
 api_key = st.text_input("Enter your VirusTotal API key")
